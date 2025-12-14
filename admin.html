@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eser JSON Oluşturucu</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; line-height: 1.6; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        textarea#output { height: 200px; font-family: monospace; margin-top: 20px; }
+        .note { background-color: #f8f9fa; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Eser JSON Oluşturucu (Client-Side)</h1>
+    <div class="note">
+        <p><strong>Nasıl Kullanılır:</strong></p>
+        <ol>
+            <li>Formu doldurun.</li>
+            <li>"KODU OLUŞTUR" butonuna basın.</li>
+            <li>Aşağıdaki kutuda oluşan JSON kodunu kopyalayın.</li>
+            <li><code>script (1).js</code> dosyasındaki <code>eserler</code> dizisine yapıştırın.</li>
+            <li>İlgili resim, ses ve model dosyalarını proje klasörüne atmayı unutmayın.</li>
+        </ol>
+    </div>
+
+    <div class="form-group">
+        <label>ID (Mevcut en son ID'den büyük olmalı):</label>
+        <input type="number" id="id" value="26">
+    </div>
+
+    <div class="form-group">
+        <label>Eser Başlığı (TR):</label>
+        <input type="text" id="title" placeholder="Örn: Bronz Papağan">
+    </div>
+    <div class="form-group">
+        <label>Eser Başlığı (EN):</label>
+        <input type="text" id="title_en" placeholder="Örn: Bronze Parrot">
+    </div>
+
+    <h3>Medya Dosyaları</h3>
+    <div class="form-group">
+        <label>Resim Dosyası Adı:</label>
+        <input type="text" id="image" placeholder="Örn: papagan.jpg">
+    </div>
+    <div class="form-group">
+        <label>Ses Dosyası Adı (Opsiyonel):</label>
+        <input type="text" id="audioSrc" placeholder="Örn: papagan.mp3">
+    </div>
+    <div class="form-group">
+        <label>3D Model Dosyası Adı (Opsiyonel - .glb):</label>
+        <input type="text" id="model" placeholder="Örn: papagan.glb">
+    </div>
+
+    <h3>Konum Bilgileri</h3>
+    <div class="form-group">
+        <label>Sergilendiği Şehir (TR):</label>
+        <input type="text" id="sergiSehir" value="Ankara">
+    </div>
+    <div class="form-group">
+        <label>Sergilendiği Şehir (EN):</label>
+        <input type="text" id="sergiSehir_en" value="Ankara">
+    </div>
+    <div class="form-group">
+        <label>Sergilendiği Müze (TR):</label>
+        <input type="text" id="museum" value="Anadolu Medeniyetleri Müzesi">
+    </div>
+    <div class="form-group">
+        <label>Sergilendiği Müze (EN):</label>
+        <input type="text" id="museum_en" value="Museum of Anatolian Civilizations">
+    </div>
+    <div class="form-group">
+        <label>Sergi Koordinatları (Lat, Lng):</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="number" step="any" id="sergiLat" value="39.9255">
+            <input type="number" step="any" id="sergiLng" value="32.8663">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Köken Şehir (TR):</label>
+        <input type="text" id="kokenSehirTR" placeholder="Örn: Isparta">
+    </div>
+    <div class="form-group">
+        <label>Köken Şehir (EN):</label>
+        <input type="text" id="kokenSehirTR_en" placeholder="Örn: Isparta">
+    </div>
+    <div class="form-group">
+        <label>Köken Koordinatları (Lat, Lng):</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="number" step="any" id="kokenLatTR" placeholder="Lat">
+            <input type="number" step="any" id="kokenLngTR" placeholder="Lng">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>İade Edildiği Şehir (Yurt Dışı - TR):</label>
+        <input type="text" id="iadeSehir" placeholder="Örn: Londra">
+    </div>
+    <div class="form-group">
+        <label>İade Edildiği Şehir (Yurt Dışı - EN):</label>
+        <input type="text" id="iadeSehir_en" placeholder="Örn: London">
+    </div>
+    <div class="form-group">
+        <label>İade Edildiği Ülke (TR):</label>
+        <input type="text" id="iadeUlke" placeholder="Örn: İngiltere">
+    </div>
+    <div class="form-group">
+        <label>İade Edildiği Ülke (EN):</label>
+        <input type="text" id="iadeUlke_en" placeholder="Örn: UK">
+    </div>
+    <div class="form-group">
+        <label>İade Edildiği Koordinatlar (Lat, Lng):</label>
+        <div style="display: flex; gap: 10px;">
+            <input type="number" step="any" id="iadeLat" placeholder="Lat">
+            <input type="number" step="any" id="iadeLng" placeholder="Lng">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Dönem (TR):</label>
+        <input type="text" id="donem" placeholder="Örn: Roma Dönemi">
+    </div>
+    <div class="form-group">
+        <label>Dönem (EN):</label>
+        <input type="text" id="donem_en" placeholder="Örn: Roman Period">
+    </div>
+    <div class="form-group">
+        <label>İade Yılı:</label>
+        <input type="text" id="iadeYili" value="2024">
+    </div>
+
+    <div class="form-group">
+        <label>Açıklama (TR):</label>
+        <textarea id="description"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Açıklama (EN):</label>
+        <textarea id="description_en"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Akademik Açıklama (TR - HTML destekler):</label>
+        <textarea id="academicDescription"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Akademik Açıklama (EN - HTML destekler):</label>
+        <textarea id="academicDescription_en"></textarea>
+    </div>
+
+    <button onclick="generateJSON()">KODU OLUŞTUR</button>
+
+    <h3>Oluşturulan JSON Kodu:</h3>
+    <textarea id="output" readonly></textarea>
+
+    <script>
+        function generateJSON() {
+            const getValue = (id) => {
+                const val = document.getElementById(id).value;
+                return val === "" ? null : val;
+            };
+
+            const getNum = (id) => {
+                const val = document.getElementById(id).value;
+                return val === "" ? null : parseFloat(val);
+            }
+
+            const eser = {
+                id: getNum('id'),
+                title: getValue('title'),
+                title_en: getValue('title_en'),
+                model: getValue('model'),
+                audioSrc: getValue('audioSrc'),
+                sergiLat: getNum('sergiLat'),
+                sergiLng: getNum('sergiLng'),
+                sergiSehir: getValue('sergiSehir'),
+                sergiSehir_en: getValue('sergiSehir_en'),
+                museum: getValue('museum'),
+                museum_en: getValue('museum_en'),
+                kokenSehirTR: getValue('kokenSehirTR'),
+                kokenSehirTR_en: getValue('kokenSehirTR_en'),
+                kokenLatTR: getNum('kokenLatTR'),
+                kokenLngTR: getNum('kokenLngTR'),
+                iadeSehir: getValue('iadeSehir'),
+                iadeSehir_en: getValue('iadeSehir_en'),
+                iadeUlke: getValue('iadeUlke'),
+                iadeUlke_en: getValue('iadeUlke_en'),
+                iadeLat: getNum('iadeLat'),
+                iadeLng: getNum('iadeLng'),
+                donem: getValue('donem'),
+                donem_en: getValue('donem_en'),
+                iadeYili: getValue('iadeYili'),
+                image: getValue('image'),
+                description: getValue('description'),
+                description_en: getValue('description_en'),
+                academicDescription: getValue('academicDescription'),
+                academicDescription_en: getValue('academicDescription_en')
+            };
+
+            const jsonOutput = JSON.stringify(eser, null, 4);
+            document.getElementById('output').value = ",\n" + jsonOutput;
+        }
+    </script>
+</body>
+</html>
