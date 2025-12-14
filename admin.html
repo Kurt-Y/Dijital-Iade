@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetim Paneli - Dijital İade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #eee; display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        #login-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; }
+        .hidden { display: none !important; }
+        #output-area { margin-top: 20px; }
+        #json-output { width: 100%; height: 200px; font-family: monospace; font-size: 12px; }
+        .row { display: flex; gap: 10px; }
+        .col { flex: 1; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <div id="login-box">
+        <h2>Yönetici Girişi</h2>
+        <input type="password" id="password-input" placeholder="Şifre Giriniz">
+        <br><br>
+        <button id="login-btn">Giriş Yap</button>
+        <p id="login-error" style="color: red; display: none;">Hatalı Şifre!</p>
+    </div>
+</div>
+
+<div id="admin-panel" class="container hidden">
+    <h1>Yeni Eser Ekle</h1>
+    <form id="artifact-form">
+        <div class="form-group">
+            <label>Eser Başlığı (TR):</label>
+            <input type="text" id="title" required>
+        </div>
+        <div class="form-group">
+            <label>Eser Başlığı (EN):</label>
+            <input type="text" id="title_en">
+        </div>
+
+        <div class="row">
+            <div class="col form-group">
+                <label>Bulunduğu Müze (TR):</label>
+                <input type="text" id="museum">
+            </div>
+            <div class="col form-group">
+                <label>Bulunduğu Müze (EN):</label>
+                <input type="text" id="museum_en">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col form-group">
+                <label>Bulunduğu Şehir (TR):</label>
+                <input type="text" id="sergiSehir">
+            </div>
+             <div class="col form-group">
+                <label>Bulunduğu Şehir (EN):</label>
+                <input type="text" id="sergiSehir_en">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col form-group">
+                <label>Ait Olduğu Şehir (TR):</label>
+                <input type="text" id="kokenSehirTR">
+            </div>
+            <div class="col form-group">
+                <label>Ait Olduğu Şehir (EN):</label>
+                <input type="text" id="kokenSehirTR_en">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label>Ait Olduğu Enlem (Lat):</label>
+                <input type="number" step="any" id="kokenLatTR" placeholder="Örn: 41.2867">
+            </div>
+            <div class="col form-group">
+                <label>Ait Olduğu Boylam (Lng):</label>
+                <input type="number" step="any" id="kokenLngTR" placeholder="Örn: 36.3300">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col form-group">
+                <label>Yurt Dışındaki Şehir (TR):</label>
+                <input type="text" id="iadeSehir">
+            </div>
+            <div class="col form-group">
+                <label>Yurt Dışındaki Şehir (EN):</label>
+                <input type="text" id="iadeSehir_en">
+            </div>
+        </div>
+         <div class="row">
+            <div class="col form-group">
+                <label>Yurt Dışındaki Ülke (TR):</label>
+                <input type="text" id="iadeUlke">
+            </div>
+            <div class="col form-group">
+                <label>Yurt Dışındaki Ülke (EN):</label>
+                <input type="text" id="iadeUlke_en">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label>Yurt Dışı Enlem (Lat):</label>
+                <input type="number" step="any" id="iadeLat" placeholder="Örn: 52.5200">
+            </div>
+            <div class="col form-group">
+                <label>Yurt Dışı Boylam (Lng):</label>
+                <input type="number" step="any" id="iadeLng" placeholder="Örn: 13.4050">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>İade Talebi Durumu (Var/Yok):</label>
+            <select id="iadeTalebi">
+                <option value="Var">Var</option>
+                <option value="Yok">Yok</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Görsel URL (örn: images/eser.jpg):</label>
+            <input type="text" id="image">
+        </div>
+        <div class="form-group">
+            <label>Ses Dosyası URL (örn: audio/eser.mp3):</label>
+            <input type="text" id="audioSrc">
+        </div>
+        <div class="form-group">
+            <label>3D Model URL (örn: models/eser.glb):</label>
+            <input type="text" id="model">
+        </div>
+
+        <div class="form-group">
+            <label>Açıklama (TR):</label>
+            <textarea id="description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Açıklama (EN):</label>
+            <textarea id="description_en" rows="3"></textarea>
+        </div>
+
+        <button type="button" id="generate-btn">JSON Oluştur</button>
+    </form>
+
+    <div id="output-area" class="hidden">
+        <h3>Oluşturulan Veri</h3>
+        <p>Aşağıdaki kodu kopyalayıp <code>script.js</code> dosyasındaki <code>eserler</code> dizisine yapıştırın veya dosyayı indirin.</p>
+        <textarea id="json-output"></textarea>
+        <button id="download-btn" style="background-color: #28a745; margin-top: 10px;">Veriyi İndir (data.json)</button>
+    </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
